@@ -1,0 +1,24 @@
+\chapter{Introduction}
+\blfootnote{This document is highly insipred by and containts work done by Michael Reyer and RWTH Aachen University. The author was allowed to alter and distribute the content provided by them.}
+
+Current broadband wireless standards are based on \gls{ofdm}, a multi-carrier modulation scheme which provides strong robustness against \gls{isi} by dividing the broadband channel into many orthogonal narrowband subchannels in such a way that attenuation across each subchannel stays flat. Orthogonalization of subchannels is performed with low complexity by using the \gls{fft}, an efficient implementation of \gls{dft}, such that the serial high-rate data stream is converted into multiple parallel low-rate streams, each modulated on a different subcarrier.
+
+Many of the currently used wireless standards are using \gls{ofdm} for the physical layer, e.g., \gls{wlan}, \gls{wimax}, \gls{dab}, \gls{dvb}, \gls{dsl}, \gls{lte}, etc. Beside the existing systems there is active research on future systems enhancing the existing standards to improve system performance. The investigation and assessment of information theoretic concepts for wireless resource management of those new systems in real-world scenarios requires flexible testbeds with a wide range of reconfigurable parameters. This functionality is currently offered in \gls{sdr} technology based on general purpose hardware only.
+
+We designed a modular, \gls{sdr} based and reconfigurable framework which treats the \gls{ofdm} transmission link as a black box. The given framework contains transmitter and receiver nodes that are composed of a host commodity computer and a general purpose \gls{rf} hardware, namely \gls{usrp}. Baseband \gls{ofdm} signal processing at host computers is implemented in the GNU~Radio framework, an open source, free software toolkit for building \glspl{sdr}~\cite{GNUR}.
+
+The control and feedback mechanisms provided by the given framework allow for reconfigurable assignments of predefined transmission parameters at the input and estimation of link quality at the output. High flexibility, provided by a large set of reconfigurable parameters, which are normally static in real systems, enables implementation and assessment of different signal processing and resource allocation algorithms for various classes of system requirements.
+
+During this lab exercises the \gls{sdr} concept will be studied. Insight into the high flexibility in system design offered by \gls{sdr} or comparable systems and corresponding architectural constraints will be gained. Within the framework, high reconfigurability of transmission parameters allows for easy assessment and evaluation of \gls{ofdm} system performance in real wireless channel conditions and for comparison with theoretically derived results.
+
+This script is organized as follows. An introduction to basic \gls{ofdm} system's characteristics is given in Chapter~\ref{sec:basic}. In Section~\ref{sec:discmod}, a corresponding discrete-model is introduced and applied for analytical assessment of the influence of system impairments which are discussed in Section~\ref{sec:sysimp}. A short survey of coherent modulation techniques commonly used in \gls{ofdm} systems and their performance evaluation in \gls{awgn} channels are presented in Section~\ref{sec:cohmod}.
+Basic principles, architectural concepts of \gls{sdr} and an introduction to GNU~Radio framework are pictured in~\cref{sec:sdrgnur}. In~\cref{sec:sdr}, system benefits and practical limitations of \gls{sdr} are addressed. Deeper insight into GNU~Radio architecture and an example of wireless channel simulation within a given framework can be gained in Section~\ref{sec:gnur}.
+In Chapter~\ref{sec:TIOFDM}, a detailed system description of the SDR framework, which will be used for lab exercises, is given.
+Finally, the preparatory and lab exercises are described, and corresponding tasks are depicted in Chapters~\ref{ch:preparation} and~\ref{ch:labs}. 
+
+% Students should show understanding of theoretical background by finalizing the preparation exercise given in Section~\ref{sec:preparation}. In Section~\ref{sec:awgn}, Lab 1 should be conducted where system performance of OFDM system in real wireless channel should be evaluated and compared with theoretical results derived in preparation exercise. Impact of frequency selective channel to system performance should be analyzed in Lab 2, given in Section \label{sec:frsel}.
+
+
+
+
+

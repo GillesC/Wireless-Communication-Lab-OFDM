@@ -1,0 +1,135 @@
+%\usepackage[english]{babel}
+\usepackage[english]{babel}
+\usepackage[T1]{fontenc}
+\usepackage{graphicx}
+
+\usepackage{float}
+\floatstyle{ruled}
+\newfloat{program}{thp}{lop}
+\floatname{program}{Program}
+
+% Pakete für Mathe:
+\usepackage{amsfonts,amsmath,amsthm,amscd,amssymb,array}
+\usepackage{nicefrac}
+
+\usepackage{xcolor, fancybox}
+\usepackage{fix-cm}
+\usepackage{lmodern}
+
+\definecolor{6gtandempurple}{HTML}{DD8A2E}
+\usepackage[colorlinks=true, linkcolor=6gtandempurple, anchorcolor=6gtandempurple, citecolor=6gtandempurple, filecolor=6gtandempurple, urlcolor=6gtandempurple]{hyperref} % Use the color defined 
+
+% Pakete für Algorithmen
+%\usepackage{algorithm,ifthen,url,algpseudocode}
+\usepackage{algpseudocode,algorithm}
+
+%Pakete zum Erstellen von ps-Grafiken
+\usepackage{pstricks,pst-plot,pst-node}
+
+% Paket, mit dem man festlegen kann, was geschehen soll, wenn die Seite voll ist.
+\usepackage{afterpage}
+
+
+\usepackage{marvosym}
+
+% "Einrichten" des theorem-Paketes:
+\newtheorem{thm}{Satz}[chapter]
+\newtheorem{lem}[thm]{Lemma}
+\newtheorem{cor}[thm]{Corollary}
+\newtheorem*{nnlem}{Lemma}
+\newtheorem*{nnthm}{Theorem}
+
+\theoremstyle{definition}
+\newtheorem{exmp}[thm]{Example}
+\newtheorem*{nnexmp}{Example}
+\newtheorem{defn}[thm]{Definition}
+\newtheorem*{nndefn}{Definition}
+
+\theoremstyle{remark}
+\newtheorem{rem}[thm]{Remark}
+\newtheorem*{nnrem}{Remark}
+
+% Einige Makros:
+\newcommand{\modulo}{\mbox{mod }}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\J}{\mathbb{J}}
+\newcommand{\HD}{\mathbb{P}}
+\newcommand{\D}{\mathbb{D}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\CO}{\mathcal{O}}
+\newcommand{\F}{\mathbb{F}}
+\newcommand{\divisor}{\mathrm{div}}
+\newcommand{\ord}{\mathrm{ord}}
+\newcommand{\supp}{\mathrm{supp}}
+\newcommand{\ggt}{\mathrm{ggt}}
+\newcommand{\charac}{\mathrm{char}}
+\renewcommand{\algorithmicrequire}{\textbf{Input:}}
+\renewcommand{\algorithmicensure}{\textbf{Output:}}
+%\renewcommand{\listalgorithmname}{Algorithms}
+\makeatletter
+\renewcommand{\ALG@name}{Algorithm}
+
+\newcommand{\option}{{\small -}{\small -}}
+\newenvironment{bew}{\begin{proof}[Proof]}{\end{proof}}
+% Komfortabler Sachen in den Index aufnehmen:
+\newcommand{\idx}[1]{#1\index{#1}}
+
+\newcommand{\bl}{\color{blue}}
+\newcommand{\bk}{\color{black}}
+\newcommand{\rd}{\color{red}}
+\newcommand{\gr}{\color{green}}
+
+% Now defining header and footer
+%\usepackage{scrpage2} % for some decent header-lines
+%\clearscrheadfoot % clear style
+%\lehead{\pagemark} % page left even
+%\lohead{\headmark} % heading left odd
+%\rohead{\pagemark} % page right odd
+%\rehead{\headmark} % heading right even
+%\setheadsepline{.5pt} % thickness of separating line
+%\setfootsepline{.5pt} % thickness of separating line
+%\lefoot{\includegraphics[height=9pt]{ti_veclogo}} % ti left even
+%\rofoot{\includegraphics[height=9pt]{RWTHAACHEN_sw}} % rwth right odd
+
+% Seitenformatierung
+% \usepackage[a4paper, top=2.0cm, bottom=1.5cm, hmargin=2.5cm, includehead, includefoot, headheight=15pt]{geometry} % Flexible and complete interface to document dimensions.
+\setlength{\parindent}{0cm} % Default space between columns of tabulars
+\setlength{\parskip}{5pt plus 2pt minus 1pt}
+\clubpenalty = 10000 % Avoid "`Schusterjungen"'
+\widowpenalty = 10000 % Avoid "`Waisenkinder"'
+\displaywidowpenalty = 10000 %
+\tolerance 1000 % Tolerance in linebreaks
+\hbadness 1000 % Number at which badness ist reported
+\emergencystretch 1.5em 
+
+\usepackage{multirow}
+
+\makeatletter
+\DeclareRobustCommand{\Cpp}
+{\valign{\vfil\hbox{##}\vfil\cr
+   \textsf{C\kern-.1em}\cr
+   $\hbox{\fontsize{\sf@size}{0}\textbf{+\kern-0.05em+}}$\cr}%
+}
+\makeatother
+\makeatletter
+\DeclareRobustCommand{\ITpp}
+{\valign{\vfil\hbox{##}\vfil\cr
+   \textsf{IT\kern-.1em}\cr
+   $\hbox{\fontsize{\sf@size}{0}\textbf{+\kern-0.05em+}}$\cr}%
+}
+\makeatother
+
+
+\makeatletter
+\def\blfootnote{\gdef\@thefnmark{}\@footnotetext}
+\makeatother
+
+\usepackage[outdir=./figs/]{epstopdf}
+
+\usepackage[capitalise]{cleveref} 
+
+\usepackage[per-mode=symbol]{siunitx}  %usage \SI{35}{\meter\squared}
+\DeclareSIUnit{\dBm}{dBm}	% add SI unit "dBm"
+
+\usepackage{cmbright}

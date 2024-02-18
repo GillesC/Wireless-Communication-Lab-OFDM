@@ -1,0 +1,49 @@
+\chapter{Assignments}\label{ch:assignments}
+
+\section{Tune your own antenna}
+In this section, you'll be customizing your own antenna. Begin by attaching the \gls{sma} connector to the provided patch antenna under the guidance of the lab instructor. Once this is completed, carefully trim small sections from the corners to fine-tune the antenna for operation at \SI{917}{\mega\hertz}.\footnote{Why don't we buy a ready-made antenna? The answer is sustainability and learning by experience. The antennas used in this lab session were manufactured with the wrong substrate altering the expected specifications of the antenna, i.e., it is de-tuned from it's designed frequency. Rather than throwing them in the bin, we reuse them in this lab. Simarly, the \gls{sma} connectors had to be altered before use.}
+
+Procedure connector:
+\begin{enumerate}
+    \item Remove the excess coating on the feed pin of the \gls{sma} connector with a cutter knife. \textbf{Before beginning, seek additional details from your lab instructor on the cutting process. Additionally, exercise caution as sharp tools are involved—cut away from the body (and fingers).}
+    \item Enlarge the hole of the feed point of the antenna by drilling (\SI{}{mm}).
+    \item Solder the connector on the antenna, two ground planes of the connector and the feed point at the front of the antenna. See~\cref{fig:patch}.
+\end{enumerate}
+
+\begin{figure}[hbtp]
+    \centering
+    \includegraphics[width=0.8\linewidth]{figs/patch_microstrip_pin_fed.png}
+    \caption{Illustration of a microstrip patch antenna on a finite ground using a pin feed (from Altair Community)}\label{fig:patch}
+\end{figure}
+
+Procedure antenna:
+\begin{enumerate}
+    \item Calibrate the NanoVNA (\url{nanovna.com}) to the desired frequency band.
+    \item Solder the SMA connector to the patch antenna.
+    \item  Connect your antenna to the NanoVNA, using \texttt{CH0}.
+    \item Set the VNA to reflect (S11) mode: \texttt{DISPLAY > CHANNEL > CH0 REFLECT}.
+    \item Refer to the S-parameter details at \url{www.antenna-theory.com/definitions/sparameters.php}. If clarification is needed, consult your lab assistant.
+    \item The antenna is tuned when the S11 curve reaches its minimum at \SI{917}{\mega\hertz}. Aim for an antenna bandwidth of at least \SI{1}{\mega\hertz} (S11 below \SI{-10}{dB} around the target frequency).
+\item Plot the S11 curve for your antenna, identify the frequency at which it radiates most effectively, and determine the antenna bandwidth.
+\item Carefully trim small sections from the copper corners of the patch antenna to decrease the patch size and adjust the radiating frequency of the antenna. \textbf{Before beginning, seek additional details from your lab instructor on the cutting process. Additionally, exercise caution as sharp tools are involved—cut away from the body (and fingers) and ensure the antenna is placed flat on the table.}
+\item Iterate the process of reading S11 and making cuts until the desired target frequency is achieved (steps 7-9).
+\item Show your results to the lab assistant before continuing to the next assignment.
+\end{enumerate}
+
+
+\section{Construct your own \gls{usrp} housing}
+To not damage the delicate electronics, the B210 should be sealed via a casing. See~\cref{fig:b210-case} for an exploded view of the casing developed by Dramco for the \gls{usrp} B210. 
+
+Sequence of instructions:
+\begin{enumerate}
+    \item Place the bolts in the holders (11, 21, 22 and 12)
+    \item Place the holders on the sides of the casings, in the outer sides of the side (1,2, 3 and 4)
+    \item Assemble the top and the sides (1 and 3), not the front (4) or back (2)
+    \item Place the B210 inside the casing, aligned with holes of the holders
+    \item Complete the assembly by mounting the front and back, encapsulating the B210.
+\end{enumerate}
+
+\begin{figure}
+    \centering
+    \includegraphics[clip, trim=0mm 50mm 0mm 0mm, width=0.8\textwidth]{figs/assemble_case.pdf}\caption{Exploded view of the B210 casing. The numbers indicates which component should be placed where.}\label{fig:b210-case}
+\end{figure}

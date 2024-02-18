@@ -1,0 +1,158 @@
+\chapter {Scripts Manipulation}
+
+In this lab exercises, you will use the GNU~Radio framework to test and evaluate the performance of an \gls{ofdm} system developed in an \gls{sdr} framework. Some useful Linux commands for easy file manipulation within the terminal window will be given. Afterwards, procedures for starting an \gls{ofdm} transceiver and given GUIs will be explained.
+
+\section{Useful Linux Commands and Hints}
+\begin{itemize}
+	\item[$\bullet$] \texttt{man {command}} = This opens the help file for the specified command. For example, type man pwd.
+	\item[$\bullet$] \texttt{pwd} = Print working directory.
+	\item[$\bullet$] \texttt{ls} = List files.
+	\item[$\bullet$] \texttt{cd} = Change directory.
+	\item[$\bullet$] \texttt{mkdir} = Create a new directory.
+	\item[$\bullet$] \texttt{cp} = Copy a file.
+	\item[$\bullet$] \texttt{cp -r} = Copy a directory recursively.
+	\item[$\bullet$] \texttt{ps -e} = Lists all current running processes
+	%\item[$\bullet$] \texttt{su} =Enter root or superuser mode
+	\item[$\bullet$] \texttt{grep} = Searches and prints lines matching a given pattern.
+	\item[$\bullet$] \texttt{vim} = A shell based text editor.
+	\item[$\bullet$] \texttt{killall} = Kills all processes matching a given name or ID number.
+	\item[$\bullet$] \texttt{rm} = Removes a file.
+	%\item[$\bullet$] \texttt{rm -rf} = Removes a directory.
+	\item[$\bullet$] \texttt{chmod} = Change read, write and execute permissions for the owner, group, and guest users.
+	%\item[$\bullet$] \texttt{<CTRL>Z} = Suspend process (application).
+	\item[$\bullet$] \texttt{<CTRL>C} = Abort process (application).
+	\item[$\bullet$] \texttt{./} = Current directory.
+	\item[$\bullet$] \texttt{../} = Parent directory of the current directory.
+	\item[$\bullet$] \texttt{<TAB>} = Command line completion (automatically fills in partially typed commands).
+	\item[$\bullet$] middle mouse button click - paste the previously selected text
+	%\item[$\bullet$] \texttt{\ti} = home directory for your login.
+	%\item[$\bullet$] \texttt{./} = root directory
+\end{itemize}
+
+\section {OFDM System Scripts Manipulation}\label{app:scman}
+\begin{enumerate}
+	\item In home directory create \textbf{omnilog} directory that will be used for storing the log files required for system configuration
+	\item Go to \textbf{omnilog} directory and create the FIFO pipe \textbf{channel} which will be used for communication between transmitter and receiver in \textbf{local environment} mode by executing\newline \texttt{mkfifo channel}
+	\item Within the terminal window go to your work directory \newline \texttt{cd /opt/sources/ofdm\_ti\_praktikum/ofdm\_ti\_praktikum/src/apps}
+ 	\item Make a omniorb configuration file which will be stored in \textbf{\textasciitilde/omnilog/ }by executing\newline \texttt{./mk\_configuration} \textbf{your\_comp}\newline where \textbf{your\_comp} is your PC hostname.
+	\item Start the CORBA name and event service by executing the script\newline \texttt{./Setup\_Local\_Environment}\newline \textbf{Note: ignore the warning messages.}
+	\item Export environment variables\newline \texttt{. /opt/gnuradio/bin/environment}
+	\item In order to set OMNIORB configuration file type\newline export \texttt{OMNIORB\_CONFIG=\textasciitilde/omnilog/omniORB-\textbf{your\_comp}.cfg}\newline \textbf{Note: last two actions need to be repeated in all active terminals.}
+	\item To check if name service is correctly running type\newline
+	\texttt{nameclt list}\newline
+	and the list of initiated name clients should be shown in the terminal window.
+	\item Transmitter (Tx) is started by typing\newline 
+	\texttt{./usrp\_tx}\newline 
+	Prior to actually execute the script, take a look at options that can be configured from command line by typing\newline
+	\texttt{./usrp\_tx \option help}\newline
+	Here is the list of options:
+	\begin{itemize}
+ 		\item  \texttt{h, \option help}            show this help message and exit
+ 		\item \texttt{-f FREQ, \option freq=FREQ}  set Tx and/or Rx frequency to FREQ [default=none]
+		%\item    \texttt{-d SUBDEV, \option subdev=SUBDEV} select USRP Tx/Rx side A or B
+		\item  \texttt{-which-usrp=WHICH\_USRP} select USRP box to use
+		%\item   \texttt{-T TX\_SUBDEV\_SPEC, \option tx-subdev-spec=TX\_SUBDEV\_SPEC} select USRP Tx side A or B
+		%\item    \texttt{\option measure    }         enable throughput measure, usrp disabled
+		\item    \texttt{\option from-file=FROM\_FILE} Sent recorded stream with USRP
+		\item    \texttt{\option to-file=TO\_FILE}     Record transmitter to disk, not being sent to USRP
+		\item    \texttt{-e INTERFACE, \option interface=INTERFACE} select Ethernet interface, default is eth0
+		\item   \texttt{-m MAC\_ADDR, \option mac-addr=MAC\_ADDR} select USRP by MAC address, default is auto-select
+		\item    \texttt{\option usrp2}               Use USRP2 Interface
+		\item    \texttt{\option fft-length=FFT\_LENGTH} set the number of FFT bins [default=512]
+		\item   \texttt{-a AMPL, \option rms-amplitude=AMPL} set total bandwidth. [default=500k]
+		\item      \texttt{\option tx-freq=FREQ}     set transmit frequency to FREQ [default=none]
+		\item     \texttt{\option snr=SNR}           Simulate AWGN channel
+		\item      \texttt{\option freqoff=FREQOFF}   Simulate frequency offset [default=none]
+		\item     \texttt{\option samplingoffset=SAMPLINGOFFSET} Simulate sampling frequency offset [default=none]
+		\item      \texttt{\option awgn}              Enable static AWGN power for BER measurement
+		%\item      \texttt{\option online-work}       Force the ofdm transmitter to work during file record [default=False]
+		%\item      \texttt{\option stations=STATIONS} Mobile station count
+		\item      \texttt{\option data-blocks=DATA\_BLOCKS} Set the number of data blocks per OFDM frame [default=9]
+		\item      \texttt{\option subcarriers=SUBCARRIERS} Set the number of occupied FFT bins. Default: FFT window size - Pilot Subcarriers
+		\item      \texttt{\option cp-length=CP\_LENGTH} Set the unique ID number for each node within the system
+		\item      \texttt{\option station-id=STATION\_ID} Set IP address or hostname that hosts the CORBA NameService
+		\item      \texttt{\option nameservice-ip=NAMESERVICE\_IP}
+		\item      \texttt{\option nameservice-port=NAMESERVICE\_PORT} Set access port to NameService
+		\item      \texttt{\option log}               enable file logs [default=False]
+		\item      \texttt{\option debug}             Enable debugging mode [default=False]
+	\end{itemize}
+
+	\item For example, in order to start transmission over USRP, execute the script with following parameters \newline \texttt{./usrp\_tx -f 2.45G \option bandwidth=2M \option fft-length=256 \option subcarriers=200 \newline
+	\option station-id=100 \option nameservice-ip=\textbf{your\_comp}}
+	\item Similarly, in order to start transmission in local environment in AWGN channel with SNR = 20 dB, execute the script with following parameters 
+	\newline \texttt{./usrp\_tx \option to-file channel \option bandwidth=2M \option fft-length=256 \option subcarriers=200\newline 
+	\option station-id=100 \option nameservice-ip=\textbf{your\_comp} \option awgn \option berm \option snr=20}.
+	\item Receiver (Rx) is started by typing\newline
+	\texttt{./usrp\_rx}\newline
+	Prior to actually execute the script, take a look at options that can be configured from command line by typing\newline
+	\texttt{./usrp\_rx \option help}\newline 
+	Here is the list of options:
+  \begin{itemize}
+ 		\item \texttt{h, \option help}            show this help message and exit
+ 		\item \texttt{-f FREQ, \option freq=FREQ}  set Tx and/or Rx frequency to FREQ [default=none]
+		%\item    \texttt{-d SUBDEV, \option subdev=SUBDEV} select USRP Tx/Rx side A or B
+		\item  \texttt{\option which-usrp=WHICH\_USRP} select USRP box to use
+		%\item   \texttt{-R RX\_SUBDEV\_SPEC, \option rx-subdev-spec=RX\_SUBDEV\_SPEC} select USRP Rx side A or B
+		\item  \texttt{\option rx-gain=GAIN}        set receiver gain in dB [default=midpoint].  See also \option show-rx-gain-range
+		\item  \texttt{\option show-rx-gain-range}  print min and max Rx gain available on selected daughterboard
+  		\item  \texttt{\option from-file=FROM\_FILE} Run Receiver on recorded stream
+  		\item  \texttt{\option to-file=TO\_FILE}     Record stream from USRP to disk, no processing
+  		\item  \texttt{-e INTERFACE, \option interface=INTERFACE} select Ethernet interface, default is eth0
+  		\item  \texttt{-m MAC\_ADDR, \option mac-addr=MAC\_ADDR} select USRP by MAC address, default is auto-select
+  		\item  \texttt{\option usrp2}               Use USRP2 Interface
+  		\item  \texttt{\option event-rxbaseband }   Enable RX baseband via event channel alps
+  		\item  \texttt{\option fft-length=FFT\_LENGTH} set the number of FFT bins [default=512]
+  		\item  \texttt{\option disable-ctf-enhancer}  Disable Enhancing the MSE of CTF
+  		\item  \texttt{\option scatterplot}         Enable the GUI interface for showing constellation diagrams of the received signal
+  		\item  \texttt{\option bandwidth=BANDWIDTH} set total bandwidth. [default=500k]
+   		\item  \texttt{\option rx-freq=FREQ}      set receive frequency to FREQ [default=none]
+   		\item  \texttt{\option online-work}       Force the OFDM receiver to work during file record [default=False]
+   		%\item  \texttt{\option measure}           enable throughput measure
+    		\item  \texttt{\option data-blocks=DATA\_BLOCKS} set the number of data blocks per OFDM frame [default=9]
+    		\item \texttt{ \option subcarriers=SUBCARRIERS} set the number of occupied FFT bins. Default: FFT window size - Pilot Subcarriers
+   		\item \texttt{ \option cp-length=CP\_LENGTH} set the number of bits in the cyclic prefix. Default: 12.5% of fft window size
+   		\item  \texttt{\option station-id=STATION\_ID} Set the unique ID number for each node within the system
+   		\item  \texttt{\option nameservice-ip=NAMESERVICE\_IP} Set IP address or hostname that hosts the CORBA NameService
+   		\item  \texttt{\option nameservice-port=NAMESERVICE\_PORT} Set access port to NameService
+   		\item  \texttt{\option log}               Enable file logs [default=False]
+		\item  \texttt{\option log-freq-off}	Enable log of frequency offset estimation
+   		\item   \texttt{\option debug}             Enable debugging mode [default=False]
+   		\item   \texttt{\option disable-freq-sync} Disabling frequency synchronization stage
+    		\item  \texttt{\option disable-equalization} Disabling equalization stage
+    		\item  \texttt{\option disable-phase-tracking} Disabling phase tracking stage
+    		\item  \texttt{\option disable-time-sync} Disabling time synchronization stage
+	\end{itemize}
+
+	\item For example, in order to start reception over USRP, execute the script with following parameters \newline \texttt{./usrp\_rx -f 2.45G \option bandwidth=2M \option fft-length=256 \option subcarriers=200 \newline
+	\option station-id=1 \option nameservice-ip=\textbf{your\_comp} \option scatterplot}
+	\item Similarly, in order to start transmission in local environment in AWGN channel, execute the script with following parameters \newline 
+	\texttt{./usrp\_rx \option from-file channel \option bandwidth=2M \option fft-length=256 \option subcarriers=200\newline
+	\option station-id=1 \option nameservice-ip=\textbf{your\_comp} \option scatterplot}
+	\item Resource manager (that will be implements in  different scripts for different exercises)  is started by executing the script\newline
+	\texttt{./run\_script ../python/exercise\_x\_x.py}
+% 		\item In order to start system's GUIs do \newline 
+% 	\texttt{cd ~/workspace/gnuradio/branches/ofdm\_system\_praktikum/src/qt/gui}
+% 	\item Tx's GUI is started by executing\newline
+% 	\texttt{./qtgui \option tx \option nameservice=lovas \option port=50001}
+% 	\item Rx's GUI is started by executing\newline
+% 	\texttt{./qtgui \option rx \option nameservice=lovas \option port=5000}
+% 	\item Constellation plots can be observed by going into directory \newline 
+% 	\texttt{~/workspace/gnuradio/branches/ofdm\_system\_praktikum/src/qt/scatterplots} 
+% 	\newline and executing the script \newline 
+% 	\texttt{./scatterplot-gui}
+\end{enumerate}
+
+
+\section {GUI Scripts Manipulation}\label{app:guiman}
+\begin{enumerate}
+		\item In order to start system's GUIs do \newline 
+	\texttt{cd /opt/sources/ofdm\_ti\_praktikum/ofdm\_ti\_praktikum/src/qt/gui}
+	\item Tx's GUI is started by executing\newline
+	\texttt{./qtgui \option tx \option nameservice=}\textbf{your\_comp}
+	\item Rx's GUI is started by executing\newline
+	\texttt{./qtgui \option rx \option nameservice=}\textbf{your\_comp}
+	\item Constellation plots can be observed by going into directory \newline 
+	\texttt{cd /opt/sources/ofdm\_ti\_praktikum/ofdm\_ti\_praktikum/src/qt/scatterplot}
+	\newline and executing the script \newline 
+	\texttt{./scatterplot-gui}
+\end{enumerate}
