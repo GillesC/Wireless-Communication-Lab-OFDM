@@ -1,25 +1,74 @@
-\chapter{OFDM Basics}\label{sec:basic}
+\chapter{OFDM Basics and Impairments}\label{sec:basic}
 
 In this chapter the basic principles of \gls{ofdm} baseband signal processing are given and an appropriate discrete-time OFDM system model is introduced. In the following section impact and prevention of synchronization errors and equalization are explained. Finally, digital modulations commonly used in wireless transmission standards are described in~\cref{sec:cohmod}.
 
-\gls{ofdm} is a multi-carrier modulation scheme that is widely adopted in many recently standardized broadband communication systems due to its ability to cope with frequency selective fading~\cite{MCMorelli}. The block diagram of a typical \gls{ofdm} system is shown in~\cref{fig:block_diagram}. The main idea behind \gls{ofdm} is to divide a high-rate encoded data stream (with symbol time $T_S$) into $N$ parallel substreams (with symbol time $T = NT_S$) that are modulated onto $N$ orthogonal carriers (referred to as subcarriers). This operation is easily implemented in the discrete time domain through an $N$-point \gls{idft} unit and the result is transmitted serially. At the receiver, the information is recovered by performing a \gls{dft} on the received block of signal samples.
-%
-\begin{figure}[thb]
+\begin{figure}[htbp]
 \centering
-\includegraphics[width=\linewidth]{ofdm_block_diag.eps}
-\caption{Block diagram of a typical OFDM system\label{fig:block_diagram}}
+\includegraphics[width=\linewidth]{figs/ofdm_block.png}
+\caption{Block diagram of a typical \gls{ofdm} system (image from~\cite{arslan2020flexible})}\label{fig:block_diagram}
 \end{figure}
-%
-%
-The data transmission in \gls{ofdm} systems is accomplished in a symbolwise fashion, where each OFDM symbol conveys~$N$ (possibly coded) complex data symbols. As a consequence of the time dispersion associated with the frequency-selective channel, contiguous OFDM symbols may partially overlap in time-domain. This phenomenon results into inter symbol interference \gls{isi}, with ensuing limitations of the system performance. The common approach to mitigate \gls{isi} is to introduce a guard interval of appropriate length among adjacent symbols. In practice, the guard interval is obtained by duplicating the last $N_G$ samples of each \gls{idft} output and, for this reason, is commonly referred to as \gls{cp}. As illustrated in ~\cref{fig:cp}, the \gls{cp} is appended in front of the corresponding \gls{idft} output. This results into an extended OFDM symbol consisted of $N_T = N + N_G$ samples which can totally remove the \gls{isi} as long as $N_G$ is properly designed according to the channel delay spread.
 
-Referring to ~\cref{fig:block_diagram}, it can be seen that the received samples are divided into adjacent segments of length $N_T$, each corresponding to a different transmitted OFDM symbol. Without loss of generality, lets concentrate on the~$i$th OFDM symbol at the receiver. The first operation is the \gls{cp} removal, which is simply accomplished by discarding the first $N_G$ samples of the considered segment. The remaining $N$ samples are fed to a \gls{dft} and the corresponding output is subsequently passed to the channel equalizer. Assuming that synchronization has already been established and the \gls{cp} is sufficiently long to eliminate the \gls{isi}, only a one-tap complex-valued multiplier is required to compensate for the channel distortion over each subcarrier, which will be further described in~\cref{ss:equ}. To better understand this fundamental property of \gls{ofdm}, however, we need to introduce the mathematical model of the communication scheme depicted in ~\cref{fig:block_diagram}.
+\section{The basics (in laymen terms)}\label{sec:ofdm-laymen}
+Imagine you have a fast internet connection, and you want to send a large file to a friend. Instead of sending the entire file in one go, you decide to break it into smaller chunks and send them separately. This makes it easier to manage and lessens the chance of losing all the data if something goes wrong during transmission. This is the main operating principle of \gls{ofdm}.
+
+\subsection{Key features}
+
+\begin{itemize}
+    \item[]\textbf{Frequency Division Multiplexing}\\ \Gls{ofdm} combines the principles of multiplexing and modulation. Multiplexing is the technique of combining multiple signals into one signal for transmission, while modulation involves modifying the properties of a carrier signal to encode information. In \gls{ofdm}, each subchannel is modulated independently using a technique like \gls{qam} (see \cref{sec:cohmod}), and then all the modulated subchannels are combined for transmission.
+    \item[]\textbf{Orthogonality}\\
+In \gls{fdm}, the subchannels are typically close to each other in frequency, which can lead to interference. \gls{ofdm} employs a clever technique called orthogonalization\footnote{In mathematics, two functions are orthogonal if their inner product (the integral of their product over a given interval) is zero.}, where the subchannels are spaced apart at precise intervals, ensuring that they don't interfere with each other. It's akin to having lanes on a highway spaced far enough apart that cars in one lane don't disrupt those in adjacent lanes.
+\item[]\textbf{Multiplexing}\\
+After orthogonalization, multiple streams of data can be transmitted simultaneously over the different subchannels. Each subchannel acts as a separate communication path, allowing for efficient use of the available spectrum. If the subchannels are used by multiple users, this technique is called \gls{ofdma}.
+\end{itemize}
+
+\subsection{Benefits of OFDM}
+
+\begin{itemize}
+    \item[] \textbf{Spectral Efficiency}\\
+    By dividing the available bandwidth into smaller subchannels, \gls{ofdm} allows for efficient use of the spectrum. This enables higher data rates compared to traditional single-carrier modulation techniques.
+    \item[] \textbf{Robustness}\\
+    \Gls{ofdm} is inherently robust against frequency-selective fading~\cite{MCMorelli}, which occurs when different frequencies in the signal experience different levels of attenuation or delay. Since \gls{ofdm} divides the signal into multiple subchannels, even if some subchannels are affected by fading, others may still carry useful data.
+    \item[] \textbf{Flexibility}\\
+    \Gls{ofdm} can adapt to changing channel conditions by adjusting parameters such as subchannel spacing and modulation scheme. This flexibility makes it suitable for a wide range of communication systems.
+\end{itemize}
+
+
+\section{The OFDM System}\label{sec:ofdm-overview}
+
+The block diagram of a typical \gls{ofdm} system is shown in~\cref{fig:block_diagram}. The main idea behind \gls{ofdm} is to divide a high-rate encoded data stream (with symbol time $T_S$) into $N$ parallel substreams (with symbol time $T = NT_S$) that are modulated onto $N$ orthogonal carriers (referred to as subcarriers). This operation is easily implemented in the discrete time domain through an $N$-point \gls{idft} unit and the result is transmitted serially. At the receiver, the information is recovered by performing a \gls{dft} on the received block of signal samples.
+%
+
+%
+%
+The data transmission in \gls{ofdm} systems is accomplished in a symbolwise fashion, where each OFDM symbol conveys~$N$ (possibly coded) complex data symbols. 
+
+\subsection{The Wireless Channel -- A short summary}
+In wireless communication systems, transmitted signals are typically reflected, diffracted, and scattered, arriving at the receiver along multiple paths with different delays, amplitudes, and phases as illustrated in~\cref{fig:multipath}. This leads to an overlapping of different copies of the same signal on the receiver side differing in their amplitude, time of arrival and phase. 
+%
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.4\textwidth]{figs/Some-effects-causing-multipath-propagation.png}
+\caption{The basic principle of multipath propagation (image form~\cite{milosevic2021key})}\label{fig:multipath}
+\end{figure}
+%
+A common model to describe the wireless channel makes use of the \textit{channel impulse response} (time domain), written as,
+\begin{equation}
+h(l)=\alpha(l) e^{j\theta(l)},
+\end{equation} for $l = 0,\ldots,L-1 $, where $L$ presents the total number of received signal paths, while $\alpha(l)$ and $ \theta(l)$ are attenuation and phase shift of the $l$th path, respectively. The differences in the time of arrival are eliminated by the cyclic prefix, which is described in the next section. One of the effects of the reception of multiple overlapping copies, i.e., multipath, is frequency selective fading. From the signal's perspective, the signal experiences different attenuation for different frequencies, complicating mitigation of these unwanted effects. This is the reason why \gls{ofdm} is used, as it ''splits'' the spectrum in several subchannels, allowing to use single-tap equalizers to resolve frequency-selective fading. See~\cref{ss:equ} for more details.
+
+
+As a consequence of the time dispersion associated with the frequency-selective channel, contiguous \gls{ofdm} symbols may partially overlap in time-domain. This phenomenon results into \gls{isi}, with ensuing limitations of the system performance. The common approach to mitigate \gls{isi} is to introduce a guard interval of appropriate length between adjacent symbols. In practice, the guard interval is obtained by duplicating the last part of the \gls{ofdm} symbol and, for this reason, is commonly referred to as \gls{cp}.
+As illustrated in~\cref{fig:cp}, the \gls{cp} is appended in front of the corresponding \gls{idft} output. This results into an extended \gls{ofdm} symbol consisted of the \gls{cp} and original \gls{ofdm} symbol. The \gls{isi} can be removed as long as the \gls{cp} length is properly designed according to the channel delay spread.
+
+Referring to~\cref{fig:block_diagram}, lets concentrate on the receiver. The first operation is the \gls{cp} removal, which is simply accomplished by discarding the first $N_G$ samples of the considered segment (the lenght of the \gls{cp}). The remaining $N$ samples are fed to a \gls{dft} and the corresponding output is subsequently passed to the \gls{fde}. Assuming that synchronization has already been established and the \gls{cp} is sufficiently long to eliminate the \gls{isi}, only a one-tap complex-valued multiplier is required to compensate for the channel distortion over each subcarrier, which will be further described in~\cref{ss:equ}. To better understand this fundamental property of \gls{ofdm}, however, we need to introduce the mathematical model of the communication scheme depicted in ~\cref{fig:block_diagram}.
 %
 \begin{figure}[thb]
 \centering
-\includegraphics[width=1.00\linewidth]{ofdm_cyclicprefix_sym.eps}
-\caption{Structure of an OFDM symbol\label{fig:cp}}
+\includegraphics[width=1.00\linewidth]{figs/cp-ofdm_block.png}
+\caption{Structure of an OFDM symbol (image from~\cite{arslan2020flexible})}\label{fig:cp}
 \end{figure}
+
+
 
 \section{Discrete-time OFDM System Model}\label{sec:discmod}
 
@@ -35,27 +84,24 @@ c_i(k)=
 \end{cases},
 \end{equation}
 %
-where $N_G$ is the length of the \gls{cp} which is an important design parameter of the \gls{ofdm} system that defines the maximum acceptable length of {channel impulse response}\index{Channel impulse response}. Furthermore, the transmitted signal can be obtained by concatenating OFDM symbols in time domain as
+where $N_G$ is the length of the \gls{cp} which is an important design parameter of the \gls{ofdm} system that defines the maximum acceptable length of channel impulse response. Furthermore, the transmitted signal can be obtained by concatenating \gls{ofdm} symbols in time domain as
 
 \begin{equation}\label{concat}
 c(k)=\sum_i{c_i(k -iN_T)}.
 \end{equation} 
 
-In wireless communication systems, transmitted signals are typically reflected, diffracted, and scattered, arriving at the receiver along multiple paths with different delays, amplitudes, and phases as illustrated in Fig~\ref{fig:multipath}. This leads to an overlapping of different copies of the same signal on the receiver side differing in their amplitude, time of arrival and phase. A common model to describe the wireless channel makes use of the {channel impulse response}\index{Channel impulse response}, written as $h(l)=\alpha(l) e^{j\theta(l)}$, for $l = 0,\ldots,L-1 $, where $L$ presents the total number of received signal paths, while $\alpha(l)$ and $ \theta(l)$ are attenuation and phase shift of the $l$th path, respectively. The differences in the time of arrival are eliminated by the cyclic prefix, which is described in the next section. %
-%
-\begin{figure}[thb]
-\centering
-\includegraphics[width=0.8\textwidth]{multipath.eps}
-\caption{The basic principle of multipath propagation}\label{fig:multipath}
-\end{figure}
-%
-In addition to multipath effects, additive noise is introduced to the transmitted signal. The main sources of additive noise are thermal background noise, electrical noise in the receiver amplifiers, and interference \cite{StuberOFDM}. The noise decreases the \gls{snr} of the received signal, resulting in a decreased performance. The total effective noise at the receiver of an \gls{ofdm} system can be modeled as \gls{awgn} with a uniform spectral density and zero-mean Gaussian probability distribution. The time domain noise samples are represented by $w(k) \sim SCN(0,\sigma_w^2)$, where $\sigma_w^2$ denotes the noise variance and zero the mean of the circular symmetric complex distribution. Therefore, the discrete-time model of received \gls{ofdm} signals can be written as
+In addition to multipath effects, additive noise is introduced to the transmitted signal. The main sources of additive noise are thermal background noise, electrical noise in the receiver amplifiers, and interference \cite{StuberOFDM}. The noise decreases the \gls{snr} of the received signal, resulting in a decreased performance. The total effective noise at the receiver of an \gls{ofdm} system can be modeled as \gls{awgn} with a uniform spectral density and zero-mean Gaussian probability distribution. The time domain noise samples are represented by $w(k) \sim CN(0,\sigma_w^2)$, where $\sigma_w^2$ denotes the noise variance and $0$ the mean of the circular symmetric complex distribution. Therefore, the discrete-time model of received \gls{ofdm} signals can be written as,
 \begin{equation}
 \label{eqn:multipath}
 y(k) = \sum_{l = 0}^{L-1} h(l)c(k-l) + w(k).
 \end{equation}
 %
 Multipath propagation and additive noise affect the signal significantly, corrupting the signal and often placing limitations on the performance of the system.
+
+
+
+
+
 
 
 
@@ -474,6 +520,7 @@ where $X_i, Y_i \in \left\lbrace\pm 1, \pm 3,\ldots,\sqrt{M}-1 \right\rbrace$ an
 \centering
 \scriptsize
 \renewcommand\arraystretch{1.6}
+\caption{Modulation dependent parameters}\label{tab:param}
 \begin{tabular}{ p{3cm} p{3cm} p{3cm}}\toprule
 Modulation&Number of bits $m$&$K$\\\midrule
 4-QAM&2&$1/\sqrt{2}$\\
@@ -481,7 +528,6 @@ Modulation&Number of bits $m$&$K$\\\midrule
 64-QAM&6&$1/\sqrt{42}$\\
 256-QAM&8&$1/\sqrt{170}$\\\bottomrule
 \end{tabular}
-\caption{Modulation dependent parameters}\label{tab:param}
 \end{table}
 %
 The \gls{ser} for \gls{qam} modulations can be expressed as
@@ -496,4 +542,24 @@ where $Q(x)$ is defined in (\ref{eqn:Qfunction}). For Gray-coded modulations  th
 \label{eqn:MQAMmodBER}
 p_{b,M-QAM} \approx \frac{p_{s,M-QAM}}{\log_2M}.
 \end{equation}
-\Gls{qam} schemes like 4-QAM (QPSK), 16-QAM and 64-QAM are used in typical wireless digital communications specifications like \gls{wlan} and \gls{wimax} \cite{WiMAXLTE}.
+
+
+\begin{table}[hbtp]
+    \centering
+    \scriptsize
+    \caption{Overview of maximum modulation depth in Wi-Fi.~\cite{enwiki:1210657347}}
+    \label{tab:wifi-qam}
+\renewcommand\arraystretch{1.6}
+    \begin{tabular}{l l l r}
+    \toprule
+    Wi-Fi standard & IEEE standard & Modulation Depth & bits per symbol\\
+    \midrule
+    Wi-Fi 5 & 802.11ac   &  256-QAM& 8\\
+    Wi-Fi 6(E) & 802.11ax   &  1024-QAM & 10\\
+    Wi-Fi 7 & 802.11be   &  4096-QAM &12\\
+    Wi-Fi 8 & 802.11bn   &  8192-QAM &13\\
+    \bottomrule
+    \end{tabular}
+    
+\end{table}
+\Gls{qam} schemes are used in several typical wireless digital communications specifications for a long time. A trend is the drastic increase in modulation depth as can be seen in \cref{tab:wifi-qam}.

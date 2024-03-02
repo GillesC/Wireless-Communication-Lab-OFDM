@@ -18,7 +18,28 @@ Procedure connector:
 
 Procedure antenna:
 \begin{enumerate}
-    \item Calibrate the NanoVNA (\url{nanovna.com}) to the desired frequency band.
+    \item Calibrate the NanoVNA (\url{nanovna.com}) to the desired frequency band (procedure from \url{https://nanorfe.com/nanovna-v2-user-manual.html}).
+    \begin{itemize}
+        \item Calibration must be performed whenever the frequency range to be measured is changed. When calibration is activated, the left side of the screen should show “Cx” and “D”.
+
+        \item Changing the frequency sweep range always clears the active calibration, if any.
+
+\item The calibration procedure is as follows:
+\begin{itemize}
+    \item Reset current calibration state. Select menu item CAL →RESET and then →CALIBRATE.
+    \item Attach a SMA coaxial cable to port 1.
+    \item Connect OPEN standard to port 1 cable and click →OPEN. Wait for menu item highlight.
+
+\item Connect SHORT standard to port 1 cable and click →SHORT. Wait for menu item highlight.
+
+\item Connect LOAD standard to port 1 cable and click →LOAD. Wait for menu item highlight.
+\item Click →DONE.
+\item Specify the dataset number (0 to 4) and save. e.g. →SAVE 0.
+\item Note that there is no need to wait for the plots to fully update after connecting a calibration standard. Clicking any of the OPEN, SHORT, LOAD, THRU calibration menu items will perform a full sweep with 2x averaging. Once the sweep is complete the corresponding menu item will become highlighted, and you may proceed to the next calibration standard.
+\end{itemize}
+
+
+    \end{itemize}
     \item Solder the \gls{sma} connector to the patch antenna.
     \item  Connect your antenna to the NanoVNA, using \texttt{CH0}.
     \item Set the \gls{vna} to reflect (S11) mode: \texttt{DISPLAY > CHANNEL > CH0 REFLECT}.
@@ -44,7 +65,7 @@ Sequence of instructions:
     \item Complete the assembly by mounting the front and back, encapsulating the B210.
 \end{enumerate}
 
-\begin{figure}
+\begin{figure}[hbtp]
     \centering
     \includegraphics[clip, trim=0mm 50mm 0mm 0mm, width=0.8\textwidth]{figs/assemble_case.pdf}\caption{Exploded view of the B210 casing. The numbers indicate which component should be placed where.}\label{fig:b210-case}
 \end{figure}
@@ -75,7 +96,14 @@ Follow the following sections on \url{https://wiki.gnuradio.org/index.php?title=
     \end{itemize}
    
 \end{itemize}
-It is imperative for the remainder of the lab sessions that you will carefully and thoroughly go through each of those tutorials. Additionally, follow the introduction tutorial on complex signals if you are not yet familiar with concepts such as complex base band and pass band (\url{https://wiki.gnuradio.org/index.php?title=IQ_Complex_Tutorial}). 
+It is imperative for the remainder of the lab sessions that you will carefully and thoroughly go through each of those tutorials. Additionally, follow the introduction tutorial on complex signals if you are not yet familiar with concepts such as complex \gls{bb} and pass band (\url{https://wiki.gnuradio.org/index.php?title=IQ_Complex_Tutorial}). 
 
+
+
+\section{Getting to know OFDM}
+Start by reading~\cref{sec:basic} with a special focus on Section~\ref{sec:ofdm-laymen},~\ref{sec:ofdm-overview},~\ref{ss:equ},~\ref{sec:cohmod}.
+After this the building blocks of \gls{ofdm} should be clear. 
+
+After completing this, consult the \textit{Basic OFDM Tutorial} of GR (\url{https://wiki.gnuradio.org/index.php?title=Basic_OFDM_Tutorial}). Create the \textit{Example loopback flowgraph}. After this, and grasping all the required knowledge to thoroughly understand this flowgraph, run this flowgraph and ask your teaching assistant to evaluate your progress.
 
 
