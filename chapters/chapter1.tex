@@ -389,20 +389,85 @@ In order to assess and compare the influence of system impairments on different 
 
 \section{Digital Modulations Used in OFDM Systems}\label{sec:cohmod}
 %
-Consider some digital information that is given by a finite bit sequence. To transmit this information over a physical, analog channel by a passband signal we need a mapping rule between the set of bit sequences and the set of possible signals or constellation points on the complex plane, as shown in ~\cref{fig:PSKconstell}. Such a mapping rule is called a digital modulation scheme. A linear digital modulation scheme is characterized by the complex baseband signal \cite{RFSDR}
+Consider some digital information that is given by a finite bit sequence. To transmit this information over a physical, analog channel by a passband signal (on the \gls{rf} frequency) we need a mapping rule between the set of bit sequences and the set of possible signals or constellation points on the complex plane, as shown in ~\cref{fig:PSKconstell}. Such a mapping rule is called a digital modulation scheme. An example is shown in~\cref{fig:bpsk-passband}, where the red signal represent a logical $1$ and the blue signal a logical $0$. The signal frequency is the carrier frequency, i.e., it is the passband signal. In \acrlong{bb}, this would be represented by one complex symbol per passband signal. To go from the passband to the \gls{bb}, the carrier frequency is removed from the passband signal, thus the only thing remaining is the amplitude and phase contributions, i.e., the complex symbol. 
+
+\begin{figure}
+    
+    \begin{subfigure}[t]{0.6\textwidth}
+    \centering
+    \begin{tikzpicture}
+  % Parameters
+  \def\phaseA{180} % Phase in degrees for cosine A
+  \def\phaseB{0} % Phase in degrees for cosine B
+  \def\frequencyA{2} % Frequency in Hz for cosine A
+  \def\frequencyB{2} % Frequency in Hz for cosine B
+  \def\amplitudeA{1} % Amplitude for cosine A
+  \def\amplitudeB{1} % Amplitude for cosine B
+  
+  % Plot cosine function A
+  \draw[->] (0,-2) -- (6.8,-2) node[right] {$t$};
+  \draw[->] (0,-2) -- (0,2) node[above] {$y$};
+  \draw[domain=0:2*pi,samples=200,smooth,variable=\t,blue] plot ({\t},{\amplitudeA*cos(\frequencyA*\t r + \phaseA)});
+  
+  % Plot cosine function B
+  \draw[domain=0:2*pi,samples=200,smooth,variable=\t,red] plot ({\t},{\amplitudeB*cos(\frequencyB*\t r + \phaseB)});
+
+
+  \node[right, red] at (2*pi,1) {$1$};
+  \node[right, blue] at (2*pi,-1) {$0$};
+
+  \node[below] at (2*pi,-2) {$T$};
+  
+   \node[below] at (0,-2) {$0$};
+  % Vertical dashed line at t = 2*pi
+  \draw[dashed] (2*pi,-2) -- (2*pi,2);
+  
+\end{tikzpicture}
+    \caption{BSPK passband signal representation.}
+    \label{fig:bpsk-passband}
+\end{subfigure}
+\hfill
+        \begin{subfigure}[t]{0.3\textwidth}
+        \centering
+    % BPSK constellation
+\begin{tikzpicture}[x=1.3cm,y=1.3cm]
+    % Draw axes
+    \draw[->] (-1.5,0) -- (1.5,0) node[right] {$I$};
+    \draw[->] (0,-1.5) -- (0,1.5) node[above] {$Q$};
+    
+    % Draw constellation points
+    \draw[fill=red] (1,0) circle (0.08) node[above right] {\footnotesize 1};
+    \draw[fill=blue] (-1,0) circle (0.08) node[above left] {\footnotesize 0};
+
+    % DRAW UNIT CIRCLE
+    \draw[dashed] (0,0) circle (1);
+    
+    % Draw labels
+    %\node[above] at (0,1.7) {BPSK};
+    %\node[below] at (0,-1.7) {Gray-coded bits: 0, 1};
+\end{tikzpicture}
+\caption{BSPK complex \gls{bb} signal representation.}
+    \label{fig:bpsk-passband}
+\end{subfigure}
+\end{figure}
+
+A linear digital modulation scheme is characterized by the complex baseband signal~\cite{RFSDR}
 %
 \begin{equation}
 \label{eqn:timetime}
 C(t) = \sum_iC_ig(t-kT),
 \end{equation}
 %
-where $C_i$ is a given constellation point and $g(t)$ is a pulse shape used for transmission.
-Since mapping is usually performed in digital domain we will keep discrete domain representation of modulated complex symbols for further simplification. In the following we will resume some of the coherent modulation schemes typically used in \gls{ofdm} systems.
+where $C_i$ is a given constellation point (complex) and $g(t)$ is a pulse shape used for transmission. In~\cref{fig:bpsk-passband}, the pulse shape is a rectangular window in the time domain, meaning that the signal is transmitted over a finite time, the symbol time $T$. 
+Since mapping is usually performed in digital domain, we will keep discrete domain representation of modulated complex symbols for further simplification. In the following, we will resume some of the coherent modulation schemes typically used in \gls{ofdm} systems.
+
+
+
 
 
 
 \subsection{Phase Shift Keying (PSK)}
-\gls{psk} or Multiple \gls{psk} (M-\gls{psk}) modulation, where $M$ is the number of constellation points, is characterized that all signal information is put into the phase of the transmitted signal, preserving constant envelope property. The M-\gls{psk} complex symbol $C_i$ can be written as
+\gls{psk} or Multiple \gls{psk} (M-\gls{psk}) modulation, where $M$ is the number of constellation points, is characterized that all signal information is put into the phase of the transmitted signal, preserving constant envelope property (the amplitude between symbols are constant). The M-\gls{psk} complex symbol $C_i$ can be written as
 %
 \begin{equation}
 \label{eqn:PSKmod}
@@ -410,27 +475,111 @@ C_i=\sqrt{S}e^{j(\frac{2\pi m}{M} + \theta_0)},\ m = 0,1,\ldots,M-1,
 \end{equation}
 %
 where $S$ is the average signal power and $\theta_0$ is an arbitrary constant phase. Constellation diagrams for $M=2,4,8$, i.e., \gls{bpsk}, \gls{qpsk} or 4-\gls{psk} and 8-\gls{psk}, respectively, when $\theta_0=0$, are shown in~\cref{fig:PSKconstell}.
-%
+
 \begin{figure}[thb]
 \centering
     \begin{subfigure}[t]{0.3\textwidth}
-    \includegraphics[width=\linewidth]{bpskmapp}
+    % BPSK constellation
+\begin{tikzpicture}[x=1.3cm,y=1.3cm]
+    % Draw axes
+    \draw[->] (-1.5,0) -- (1.5,0) node[right] {$I$};
+    \draw[->] (0,-1.5) -- (0,1.5) node[above] {$Q$};
+    
+    % Draw constellation points
+    \draw[fill=black] (1,0) circle (0.05) node[above right] {\footnotesize 1};
+    \draw[fill=black] (-1,0) circle (0.05) node[above left] {\footnotesize 0};
+
+    % DRAW UNIT CIRCLE
+    \draw[dashed] (0,0) circle (1);
+    
+    % Draw labels
+    %\node[above] at (0,1.7) {BPSK};
+    %\node[below] at (0,-1.7) {Gray-coded bits: 0, 1};
+\end{tikzpicture}
     \caption{BPSK constellation diagram}\label{fig:BPSK}
     \end{subfigure}
 \hfill
     \begin{subfigure}[t]{0.3\textwidth}
-    \includegraphics[width=\linewidth]{qpskmapp}
+    % QPSK constellation
+\begin{tikzpicture}[x=1.3cm,y=1.3cm]
+% Draw axes
+    \draw[->] (-1.5,0) -- (1.5,0) node[right] {$I$};
+    \draw[->] (0,-1.5) -- (0,1.5) node[above] {$Q$};
+    
+  \foreach \i/\j/\k in {0.707/-0.707/01, -0.707/-0.707/00} {
+    \node[circle,fill,inner sep=1.5pt,label={[font=\footnotesize]below:$\k$}] at (\i,\j) {};
+  }
+  \foreach \i/\j/\k in {0.707/0.707/11, -0.707/0.707/10} {
+    \node[circle,fill,inner sep=1.5pt,label={[font=\footnotesize]above:$\k$}] at (\i,\j) {};
+  }
+  %\node[align=center] at (0,-2) {QPSK Constellation};
+  % DRAW UNIT CIRCLE
+    \draw[dashed] (0,0) circle (1);
+    
+    % Draw labels
+    %\node[above] at (0,1.9) {QPSK};
+    %\node[below] at (0,-1.7) {Gray-coded bits: 00, 01, 11, 10};
+    
+\end{tikzpicture}
     \caption{QPSK(4-PSK) constellation diagram}\label{fig:QPSK}
     \end{subfigure}
 \hfill
     \begin{subfigure}[t]{0.3\textwidth}
-    \includegraphics[width=\linewidth]{8pskmapp}
+    % 16-QAM constellation
+\begin{tikzpicture}[x=1.3cm,y=1.3cm]
+ % Draw axes
+    \draw[->] (-1.5,0) -- (1.5,0) node[right] {$I$};
+    \draw[->] (0,-1.5) -- (0,1.5) node[above] {$Q$};
+
+     % DRAW UNIT CIRCLE
+    \draw[dashed] (0,0) circle (1);
+    
+  \foreach \angle/\bits in {225/101, 270/110, 315/111} {
+    \draw (\angle:1) node[circle,fill,inner sep=1.5pt,label={[font=\footnotesize]below:$\bits$}] {};
+  }
+
+  \foreach \angle/\bits in {45/001, 90/010, 135/011} {
+    \draw (\angle:1) node[circle,fill,inner sep=1.5pt,label={[font=\footnotesize]above:$\bits$}] {};
+  }
+
+  \draw (0:1) node[circle,fill,inner sep=1.5pt,label={[font=\footnotesize]above right:$000$}] {};
+
+  \draw (180:1) node[circle,fill,inner sep=1.5pt,label={[font=\footnotesize]above left:$100$}] {};
+
+  % \foreach \angle/\bits in {0/000, 45/001, 90/010, 135/011, 180/100, 225/101, 270/110, 315/111} {
+  %   \draw (\angle:1) node[circle,fill,inner sep=1.5pt,label={[font=\footnotesize]below:$\bits$}] {};
+  % }
+
+  %\node[align=center] at (0,-2) {8-PSK Constellation};
+\end{tikzpicture}
     \caption{8-PSK constellation diagram}
     \label{fig:8PSK}
     \end{subfigure}
-\caption{Gray-coded M-PSK constellation diagrams}
+\caption{Gray-coded constellation diagrams}
 \label{fig:PSKconstell}
 \end{figure}
+
+%
+% \begin{figure}[thb]
+% \centering
+%     \begin{subfigure}[t]{0.3\textwidth}
+%     \includegraphics[width=\linewidth]{bpskmapp}
+%     \caption{BPSK constellation diagram}\label{fig:BPSK}
+%     \end{subfigure}
+% \hfill
+%     \begin{subfigure}[t]{0.3\textwidth}
+%     \includegraphics[width=\linewidth]{qpskmapp}
+%     \caption{QPSK(4-PSK) constellation diagram}\label{fig:QPSK}
+%     \end{subfigure}
+% \hfill
+%     \begin{subfigure}[t]{0.3\textwidth}
+%     \includegraphics[width=\linewidth]{8pskmapp}
+%     \caption{8-PSK constellation diagram}
+%     \label{fig:8PSK}
+%     \end{subfigure}
+% \caption{Gray-coded M-PSK constellation diagrams}
+% \label{fig:PSKconstell}
+% \end{figure}
 %
 The simplest \gls{psk} modulation format is \gls{bpsk}, where a logical \glqq 1\grqq\ is encoded as $0$ phase, and a logical \glqq 0\grqq\ is coded as a phase of $\pi$. Then, the modulated symbol, defined in (\ref{eqn:PSKmod}), can be written as
 %
@@ -439,82 +588,205 @@ The simplest \gls{psk} modulation format is \gls{bpsk}, where a logical \glqq 1\
 C_i=\pm \sqrt{S}
 \end{equation}
 %
-with constellation diagram shown in ~\cref{fig:BPSK}. M\gls{psk} constellation diagram for 4-\gls{psk} ($2$ bits mapped into $4=2^2$ phases) and 8-\gls{psk} ($3$ bits mapped into $8=2^3$ phases), are shown in ~\cref{fig:QPSK} and ~\cref{fig:8PSK}, respectively. Note that they are optimized to minimize the \gls{ber}, resulting in the gray-coded M-PSK constellation, i.e., adjacent constellation points differ in one bit as in ~\cref{fig:PSKconstell}. The BER is defined as the ratio between the number of successfully received to the number of total transmitted information bits and is usually taken as a measure of modulation quality. For \gls{bpsk} in \gls{awgn} it is given as \cite{WiComGoldsmith}
-%
-\begin{equation}
-\label{eqn:BPSKmodBER}
-p_{b,BPSK} = Q\left(\sqrt{\frac{2E_b}{N_0}}\right), 
-\end{equation}
-%
-where $\frac{E_b}{N_0}$ is the SNR\index{SNR} per bit and $Q(x)$ is defined as
-%
-\begin{equation}
-\label{eqn:Qfunction}
-Q(x)=\frac{1}{2}\operatorname{erfc}\left(\frac{x}{\sqrt{2}}\right),
-\end{equation}
-%
-where
-%
-\begin{equation}
-\label{eqn:Erfcfunction}
-\operatorname{erfc}(x)=\frac{2}{\sqrt{\pi}}\int_x^{\infty}{e^{-y^2}dy}
-\end{equation}
-%
-is the complementary error function ($\operatorname{erfc}$).
-For higher order M-\gls{psk}, where $M>4$, the symbol error rate (SER)\index{SER} can be expressed as
-%
-\begin{equation}
-\label{eqn:PSKmodBER}
-p_{s,M-PSK} = 2Q\left( \sqrt{\frac{2E_b\log_2M}{N_0}}\sin{\frac{\pi}{M}}\right),
-\end{equation}
-%
-where 
-\begin{equation*}
-\frac{E_s}{N_0}=\frac{E_b\log_2M}{N_0}
-\end{equation*}
-is the \gls{snr} per symbol. For Gray-coded modulations the \gls{ber} in the high \gls{snr} regime for each modulation is approximately
-\begin{equation*} 
-p_{b,M-PSK} \approx \frac{p_{s,M-PSK}}{\log_2M}.
-\end{equation*}
+with constellation diagram shown in ~\cref{fig:BPSK}. M-\gls{psk} constellation diagram for 4-\gls{psk} ($2$ bits mapped into $4=2^2$ phases) and 8-\gls{psk} ($3$ bits mapped into $8=2^3$ phases), are shown in ~\cref{fig:QPSK} and ~\cref{fig:8PSK}, respectively. Note that they are optimized to minimize the \gls{ber}, resulting in the gray-coded M-PSK constellation, i.e., adjacent constellation points differ in one bit as in ~\cref{fig:PSKconstell}. The BER is defined as the ratio between the number of successfully received to the number of total transmitted information bits and is usually taken as a measure of modulation quality. 
 
-\subsection{Quadrature Amplitude Modulation (QAM)}
-\begin{figure}[thb]
-\centering
+% For \gls{bpsk} in \gls{awgn} it is given as \cite{WiComGoldsmith}
+% %
+% \begin{equation}
+% \label{eqn:BPSKmodBER}
+% p_{b,BPSK} = Q\left(\sqrt{\frac{2E_b}{N_0}}\right), 
+% \end{equation}
+% %
+% where $\frac{E_b}{N_0}$ is the SNR\index{SNR} per bit and $Q(x)$ is defined as
+% %
+% \begin{equation}
+% \label{eqn:Qfunction}
+% Q(x)=\frac{1}{2}\operatorname{erfc}\left(\frac{x}{\sqrt{2}}\right),
+% \end{equation}
+% %
+% where
+% %
+% \begin{equation}
+% \label{eqn:Erfcfunction}
+% \operatorname{erfc}(x)=\frac{2}{\sqrt{\pi}}\int_x^{\infty}{e^{-y^2}dy}
+% \end{equation}
+% %
+% is the complementary error function ($\operatorname{erfc}$).
+% For higher order M-\gls{psk}, where $M>4$, the symbol error rate (SER)\index{SER} can be expressed as
+% %
+% \begin{equation}
+% \label{eqn:PSKmodBER}
+% p_{s,M-PSK} = 2Q\left( \sqrt{\frac{2E_b\log_2M}{N_0}}\sin{\frac{\pi}{M}}\right),
+% \end{equation}
+% %
+% where 
+% \begin{equation*}
+% \frac{E_s}{N_0}=\frac{E_b\log_2M}{N_0}
+% \end{equation*}
+% is the \gls{snr} per symbol. For Gray-coded modulations the \gls{ber} in the high \gls{snr} regime for each modulation is approximately
+% \begin{equation*} 
+% p_{b,M-PSK} \approx \frac{p_{s,M-PSK}}{\log_2M}.
+% \end{equation*}
 
-\begin{subfigure}[b]{0.42\textwidth}
-    \includegraphics[width=\linewidth]{figs/4-QAM.eps}
-    \caption{4-QAM constellation diagram}
+\subsection{QuaIdrature Amplitude Modulation (QAM)}
+\gls{qam} is a bandwidth efficient signaling scheme that, unlike M-\gls{psk} does not possess a
+constant envelope property, thus offering higher bandwidth efficiency, i.e., more bits per second (bps) can be transmitted in a given frequency bandwidth. 
+
+
+
+
+
+
+\begin{figure}[hbtp]
+    \centering
+    \begin{subfigure}[t]{0.3\textwidth}\centering
+    \begin{tikzpicture}[x=1.6cm,y=1.6cm]
+    % Define the constellation points
+    \foreach \i in {0,...,1} {
+        \foreach \j in {0,...,1} {
+            \pgfmathsetmacro{\x}{-0.5 + \i}
+            \pgfmathsetmacro{\y}{-0.5 + \j}
+            \node[draw, circle, fill=black, inner sep=0.5pt] at (\x, \y) {};
+        }
+    }
+    % Add axes
+    \draw[->] (-1.125,0) -- (1.125,0) node[right] {$I$};
+    \draw[->] (0,-1.125) -- (0,1.125) node[above] {$Q$};
+    \end{tikzpicture}
+    \caption{4-QAM}
     \label{fig:4QAM}
-    \end{subfigure}%
-\begin{subfigure}[b]{0.42\textwidth}
-    \includegraphics[width=\linewidth]{figs/16-QAM.eps}
-    \caption{16-QAM constellation diagram}
+    \end{subfigure}\hfill
+    \begin{subfigure}[t]{0.3\textwidth}\centering
+        \begin{tikzpicture}[x=0.8cm,y=0.8cm]
+    % Define the constellation points
+    \foreach \i in {0,...,3} {
+        \foreach \j in {0,...,3} {
+            \pgfmathsetmacro{\x}{-1.5 + \i}
+            \pgfmathsetmacro{\y}{-1.5 + \j}
+            \node[draw, circle, fill=black, inner sep=0.5pt] at (\x, \y) {};
+        }
+    }
+    % Add axes
+    \draw[->] (-2.25,0) -- (2.25,0) node[right] {$I$};
+    \draw[->] (0,-2.25) -- (0,2.25) node[above] {$Q$};
+    \end{tikzpicture}
+    \caption{16-QAM}
     \label{fig:16QAM}
-    \end{subfigure}
-
-\begin{subfigure}[b]{0.42\textwidth}
-    \includegraphics[width=\linewidth]{figs/64-QAM.eps}
-    \caption{64-QAM constellation diagram}
+    \end{subfigure}\hfill
+    \begin{subfigure}[t]{0.3\textwidth}\centering
+    \begin{tikzpicture}[x=0.4cm,y=0.4cm]
+    % Define the constellation points
+    \foreach \i in {0,...,7} {
+        \foreach \j in {0,...,7} {
+            \pgfmathsetmacro{\x}{-3.5 + \i}
+            \pgfmathsetmacro{\y}{-3.5 + \j}
+            \node[draw, circle, fill=black, inner sep=0.5pt] at (\x, \y) {};
+        }
+    }
+    % Add axes
+    \draw[->] (-4.5,0) -- (4.5,0) node[right] {$I$};
+    \draw[->] (0,-4.5) -- (0,4.5) node[above] {$Q$};
+    \end{tikzpicture}
+    \caption{64-QAM}
     \label{fig:64QAM}
-    \end{subfigure}%
-\begin{subfigure}[b]{0.42\textwidth}
-    \includegraphics[width=\linewidth]{figs/256-QAM.eps}
-    \caption{256-QAM constellation diagram}
-    \label{fig:256QAM}
     \end{subfigure}
-%%\end{center}
-\caption{QAM constellation diagrams}
+    
+    \begin{subfigure}[t]{0.3\textwidth}\centering
+    \begin{tikzpicture}[x=0.2cm,y=0.2cm]
+        % Define the constellation points
+        \foreach \i in {0,...,15} {
+            \foreach \j in {0,...,15} {
+                \pgfmathsetmacro{\x}{-7.5 + \i}
+                \pgfmathsetmacro{\y}{-7.5 + \j}
+                \node[draw, circle, fill=black, inner sep=0.5pt] at (\x, \y) {};
+            }
+        }
+        % Add axes
+        \draw[->] (-9,0) -- (9,0) node[right] {$I$};
+        \draw[->] (0,-9) -- (0,9) node[above] {$Q$};
+        \end{tikzpicture}
+        \caption{256-QAM}
+    \label{fig:256QAM}
+    \end{subfigure}\hfill
+     \begin{subfigure}[t]{0.3\textwidth}\centering
+    \begin{tikzpicture}[x=0.1cm,y=0.1cm]
+        % Define the constellation points
+        \foreach \i in {0,...,31} {
+            \foreach \j in {0,...,31} {
+                \pgfmathsetmacro{\x}{-15.5 + \i}
+                \pgfmathsetmacro{\y}{-15.5 + \j}
+                \node[draw, circle, fill=black, inner sep=0.1pt] at (\x, \y) {};
+            }
+        }
+        % Add axes
+        \draw[->] (-18,0) -- (18,0) node[right] {$I$};
+        \draw[->] (0,-18) -- (0,18) node[above] {$Q$};
+        \end{tikzpicture}
+        \caption{1024-QAM}
+    \label{fig:1024QAM}
+    \end{subfigure}\hfill
+     \begin{subfigure}[t]{0.3\textwidth}\centering
+    \begin{tikzpicture}[x=0.05cm,y=0.05cm]
+        % Define the constellation points
+        \foreach \i in {0,...,63} {
+            \foreach \j in {0,...,63} {
+                \pgfmathsetmacro{\x}{-31.5 + \i}
+                \pgfmathsetmacro{\y}{-31.5 + \j}
+                \node[draw, circle, fill=black, inner sep=0pt] at (\x, \y) {};
+            }
+        }
+        % Add axes
+        \draw[->] (-36,0) -- (36,0) node[right] {$I$};
+        \draw[->] (0,-36) -- (0,36) node[above] {$Q$};
+        \end{tikzpicture}
+        \caption{4096-QAM}
+    \label{fig:4096QAM}
+    \end{subfigure}
+    \caption{QAM constellation diagrams}
 \label{fig:QAMconstell}
 \end{figure}
-%
-\gls{qam} is a bandwidth efficient signaling scheme that, unlike M-\gls{psk} does not possess a
-constant envelope property, thus offering higher bandwidth efficiency, i.e., more bits per second (bps) can be transmitted in a given frequency bandwidth. \gls{qam} modulated signals for $M$ constellation points can be written as
+
+\Gls{qam} modulated signals for $M$ constellation points can be written as
 %
 \begin{equation*}
 C_i=\sqrt{S}K(X_i + jY_i),
 \end{equation*}
 %
-where $X_i, Y_i \in \left\lbrace\pm 1, \pm 3,\ldots,\sqrt{M}-1 \right\rbrace$ and $K$ is a scaling factor for normalizing the average power for all constellations to $S$. The $K$ value for various constellations is shown in Table~\ref{tab:param}. Corresponding \gls{qam} constellation diagrams for 4-\gls{qam} ($2$ bits mapped into $4=2^2$ points), 16-\gls{qam} ($4$ bits mapped into $16=2^4$ points), 64-\gls{qam} ($6$ bits mapped into $64=2^6$ points), and 256-\gls{qam} ($8$ bits mapped into $16=2^8$ points), are shown in ~\cref{fig:QAMconstell}. It can be noticed that 4-\gls{qam} corresponds to \gls{qpsk} with constant phase shift $\theta_0 =\pi/4$.
+where $X_i, Y_i \in \left\lbrace\pm 1, \pm 3,\ldots,\sqrt{M}-1 \right\rbrace$ and $K$ is a scaling factor for normalizing the average power for all constellations to $S$. The $K$ value for various constellations is shown in Table~\ref{tab:param}. Corresponding \gls{qam} constellation diagrams for 4-\gls{qam} ($2$ bits mapped into $4=2^2$ points), 16-\gls{qam} ($4$ bits mapped into $16=2^4$ points), 64-\gls{qam} ($6$ bits mapped into $64=2^6$ points), and 256-\gls{qam} ($8$ bits mapped into $16=2^8$ points), are shown in ~\cref{fig:QAMconstell}. It can be noticed that 4-\gls{qam} corresponds to \gls{qpsk} with constant phase shift $\theta_0 =\pi/4$. 
+
+\Gls{qam} schemes are used in several typical wireless digital communications specifications for a long time. A trend is the drastic increase in modulation depth as can be seen in \cref{tab:wifi-qam}.
+
+
+% \begin{figure}[thb]
+% \centering
+
+% \begin{subfigure}[b]{0.42\textwidth}
+%     \includegraphics[width=\linewidth]{figs/4-QAM.eps}
+%     \caption{4-QAM constellation diagram}
+%     \label{fig:4QAM}
+%     \end{subfigure}%
+% \begin{subfigure}[b]{0.42\textwidth}
+%     \includegraphics[width=\linewidth]{figs/16-QAM.eps}
+%     \caption{16-QAM constellation diagram}
+%     \label{fig:16QAM}
+%     \end{subfigure}
+
+% \begin{subfigure}[b]{0.42\textwidth}
+%     \includegraphics[width=\linewidth]{figs/64-QAM.eps}
+%     \caption{64-QAM constellation diagram}
+%     \label{fig:64QAM}
+%     \end{subfigure}%
+% \begin{subfigure}[b]{0.42\textwidth}
+%     \includegraphics[width=\linewidth]{figs/256-QAM.eps}
+%     \caption{256-QAM constellation diagram}
+%     \label{fig:256QAM}
+%     \end{subfigure}
+% %%\end{center}
+% \caption{QAM constellation diagrams}
+% \label{fig:QAMconstell}
+% \end{figure}
+%
+
 %
 \begin{table}[htb]
 \centering
@@ -530,18 +802,18 @@ Modulation&Number of bits $m$&$K$\\\midrule
 \end{tabular}
 \end{table}
 %
-The \gls{ser} for \gls{qam} modulations can be expressed as
-%
-\begin{equation*}
-%\label{eqn:MQAMmodSER}
-p_{s,M-QAM} = 1-\left( 1-2\left( 1-\frac{1}{\sqrt{M}}\right)Q\left( \sqrt{3\frac{E_b\log_2 M}{(M-1)N_0}}\right) \right) ^2.
-\end{equation*}
-%
-where $Q(x)$ is defined in (\ref{eqn:Qfunction}). For Gray-coded modulations  the \gls{ber} in the high \gls{snr} regime for each modulation is, as for M-PSK case, approximately
-\begin{equation}
-\label{eqn:MQAMmodBER}
-p_{b,M-QAM} \approx \frac{p_{s,M-QAM}}{\log_2M}.
-\end{equation}
+% The \gls{ser} for \gls{qam} modulations can be expressed as
+% %
+% \begin{equation*}
+% %\label{eqn:MQAMmodSER}
+% p_{s,M-QAM} = 1-\left( 1-2\left( 1-\frac{1}{\sqrt{M}}\right)Q\left( \sqrt{3\frac{E_b\log_2 M}{(M-1)N_0}}\right) \right) ^2.
+% \end{equation*}
+% %
+% where $Q(x)$ is defined in (\ref{eqn:Qfunction}). For Gray-coded modulations  the \gls{ber} in the high \gls{snr} regime for each modulation is, as for M-PSK case, approximately
+% \begin{equation}
+% \label{eqn:MQAMmodBER}
+% p_{b,M-QAM} \approx \frac{p_{s,M-QAM}}{\log_2M}.
+% \end{equation}
 
 
 \begin{table}[hbtp]
@@ -562,4 +834,4 @@ p_{b,M-QAM} \approx \frac{p_{s,M-QAM}}{\log_2M}.
     \end{tabular}
     
 \end{table}
-\Gls{qam} schemes are used in several typical wireless digital communications specifications for a long time. A trend is the drastic increase in modulation depth as can be seen in \cref{tab:wifi-qam}.
+
