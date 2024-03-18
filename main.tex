@@ -13,6 +13,12 @@
 
 \usepackage{tikz}
 \usetikzlibrary{shapes}
+\usetikzlibrary{positioning}
+\usetikzlibrary{arrows}
+\usetikzlibrary{decorations.pathreplacing}
+\usetikzlibrary{external}
+\tikzexternalize[prefix=tikz/,optimize command away=\includepdf]
+
 
 \usepackage{siunitx} % Provides the \SI{}{} and \si{} command for typesetting SI units
 \usepackage{graphicx} % Required for the inclusion of images
@@ -36,7 +42,7 @@
 % Of course, pdfLaTeX (or whatever engine/format you use) still has to be called with the -shell-escape option.
 
 
-
+\usepackage{hyperref}
 \loadglsentries{abbr.tex}
 \makeglossaries % generate the glossary
 % Any links in resulting glossary will not be "clickable" unless you load the glossaries package after the hyperref package.
@@ -95,7 +101,12 @@
 \include{chapters/chapter1}
 \include{chapters/chapter2}
 %\include{chapters/chapter3}
-\include{chapters/chapter4}
+
+\include{chapters/OFDM-in-GR}
+
+\include{chapters/assignments}
+
+
 %\include{chapters/chapter5}
 
 \include{chapters/evaluation}
