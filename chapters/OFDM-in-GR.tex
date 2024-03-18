@@ -224,12 +224,12 @@ In~\cite{650240}, the energy of the second part is computed only,
 \begin{equation*} 
                 R(d) = \sum_{i=0}^{N/2-1} \left|z\left[\left(d+\frac{N}{2}\right)+ i\right]\right|^2.
 \end{equation*}
-This differs from the computation in GNU~Radio which computes the energy of both halves. This avoids spurious detects at the end of a burst, when the energy level suddenly drops.
+This differs from the computation in GNU~Radio which computes the energy of both halves. This avoids spurious detections at the end of a burst, when the energy level suddenly drops.
 
 The new timing synchronization metric $M(d)$ is defined as,
 
 \begin{equation}\label{eqOFDMmd} 
-        M(\epsilon_0) = \frac{|P(d)|^2}{R(d)^2}.
+        M(d) = \frac{|P(d)|^2}{R(d)^2}.
 \end{equation}
 
 And the optimal timing instant is given as,
