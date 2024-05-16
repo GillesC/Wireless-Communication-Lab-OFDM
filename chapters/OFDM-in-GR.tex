@@ -163,7 +163,7 @@ Next to this, the \texttt{OFDM Transmitter} block performs prepending two sync w
     is zero. In the time domain, this results in two identical halves of
     the OFDM symbols. Symbols are always BPSK symbols. Carriers are scaled by sqrt(2) to keep total energy constant. Note, that the default sync word only contains symbols on the \mintinline{python}{occupied_carriers} indices.
     \item  \textbf{Sync Word 2}\\
-    The second sync preamble symbol. This has to be filled entirely. Also used for coarse frequency offset and channel estimation. Length of sync sequence must be the same as the value of FFT length.  
+    The second sync preamble symbol. This has to be filled entirely. Also used for coarse frequency offset and channel estimation. The length of sync sequence must be the same as the value of FFT length.  
     If None is used, it creates a random sync sequence for coarse frequency offset and channel estimation. This is the second of typically two sync preamble symbols for the Schmidl \& Cox sync algorithm. Symbols are always BPSK symbols. No scaling is applied, as all carriers (\mintinline{python}{occupied_carriers}) are used.
     \item \textbf{Header Modulation}\\
      It has two options:
