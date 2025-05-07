@@ -80,6 +80,9 @@ Finally, the cyclic prefix is added to the OFDM symbols, through the \texttt{OFD
 
 Next to this, the \texttt{OFDM Transmitter} block performs prepending two sync words, header, and payload modulation. For the remainder of the lab session, make use of the transmitter block, instead of separate blocks.
 
+
+\begin{figure}
+    \centering
 \begin{tikzpicture}[>=stealth, node distance=0.5cm and 0.5cm]
     % Nodes
     \node [coordinate] (start) {};
@@ -122,8 +125,12 @@ Next to this, the \texttt{OFDM Transmitter} block performs prepending two sync w
     \draw[o->] (sync) -- (allocator);
     
 \end{tikzpicture}
+    \caption{OFDM Transmitter Flowchart}
+    \label{fig:ofdm-tx-flowchart}
+\end{figure}
 
-\subsection{OFDM Transmitter}
+
+\subsection{OFDM Transmitter}\label{sec:ofdm-tx}
 
 \subsubsection{Paramaters}
 
